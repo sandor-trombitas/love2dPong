@@ -4,6 +4,25 @@ mt.__index = mt
 
 function mt:update(dt, gameState)
     self.gameState = gameState
+
+    if (self.player1 > 3) then
+        GAME_STATE = 'PLAYER 1 WINS'
+        self:reset()
+    end
+    if (self.player2 > 3) then
+        GAME_STATE = 'PLAYER 2 WINS'
+        self:reset()
+    end
+end
+
+function mt:reset()
+    self.player1 = 0
+    self.player2 = 0
+end
+
+function mt:updateScore(player)
+    self[player] = self[player] + 1
+    GAME_STATE = 'START'
 end
 
 function mt:draw()
