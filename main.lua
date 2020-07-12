@@ -28,6 +28,14 @@ function love.load()
     retroFont = love.graphics.newFont('font.ttf', 32)
     scoreFont = love.graphics.newFont('font.ttf', 128)
 
+    sounds = {
+        ['paddle_hit'] = love.audio.newSource('sounds/paddle_hit.wav', 'static'),
+        ['score'] = love.audio.newSource('sounds/score.wav', 'static'),
+        ['wall_hit'] = love.audio.newSource('sounds/wall_hit.wav', 'static')
+    }
+
+
+
     -- Init screen
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false,

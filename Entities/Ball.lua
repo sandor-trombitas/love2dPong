@@ -7,9 +7,10 @@ function mt:bounce(axis, wall)
     if axis == 'x' then
         self.speed[axis] = self.speed[axis] * -1
     else
-        self.speed[axis] = ((self.speed[axis] / math.abs(self.speed[axis])) * -1) * (love.math.random(25, self.speed[axis] / 10) * 10)
+        self.speed[axis] = ((self.speed[axis] / math.abs(self.speed[axis])) * -1) * (love.math.random(250, math.abs(self.speed[axis])))
     end
 
+    print(self.speed.x, self.speed.y)
 end
 
 function mt:collides(paddle)
@@ -22,6 +23,7 @@ function mt:collides(paddle)
     end
 
     self:bounce('x', self.speed.x > 0 and (paddle.x - self.width) or paddle.x + paddle.width)
+    sounds.paddle_hit:play()
 end
 
 function mt:update(dt, gameState)
@@ -32,12 +34,14 @@ function mt:update(dt, gameState)
     if (self.x > (love.graphics.getWidth() - self.width))
     then
         self.scoreBoard:updateScore('player1')
+        sounds.score:play()
         self:reset()
     end
 
     if (self.x < 0)
     then
         self.scoreBoard:updateScore('player2')
+        sounds.score:play()
         self:reset()
     end
 
@@ -45,11 +49,13 @@ function mt:update(dt, gameState)
     if (self.y > (love.graphics.getHeight() - self.height))
     then
         self:bounce('y', love.graphics.getHeight() - self.height)
+        sounds.wall_hit:play()
     end
 
     if (self.y <= 0)
     then
         self:bounce('y', 0)
+        sounds.wall_hit:play()
     end
 
 end
@@ -66,17 +72,18 @@ function mt:reset()
 end
 
 return {
-  new = function(scoreBoard)
+  new = function(scoreBoard, sounds)
     return setmetatable({
-        x = (love.graphics.getWidth() / 2),
-        y = love.graphics.getHeight() / 2,
+        x = WINDOW_WIDTH / 2,
+        y = WINDOW_HEIGHT / 2,
         width = 20,
         height = 20,
         speed = {
             x = 400,
             y = 400
         },
-        scoreBoard = scoreBoard
+        scoreBoard = scoreBoard,
+        sounds = sounds
     }, mt)
   end
 }
